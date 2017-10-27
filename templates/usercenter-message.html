@@ -1,0 +1,116 @@
+{% extends 'usercenter-base.html' %}
+{% load staticfiles %}
+
+{% block title %}
+我的消息
+{% endblock %}
+
+{% block custom_bread %}
+    <section>
+        <div class="wp">
+            <ul  class="crumbs">
+                <li><a href="{% url 'index' %}">首页</a>></li>
+                <li><a href="{% url 'users:user_info' %}">个人中心</a>></li>
+                <li>我的消息</li>
+            </ul>
+        </div>
+    </section>
+{% endblock %}
+
+{% block right_content %}
+    <div class="right" >
+		<div class="personal_des Releasecont">
+			<div class="head">
+				<h1>发送消息</h1>
+			</div>
+		</div>
+		<div class="personal_des permessage">
+
+            <div class="inforcon">
+				<form class="perinform" action="{% url "users:send_msg" %}" method="post" id="jsEditUserForm" autocomplete="off">
+					<ul class="right">
+                        <li>收   件   方 i d ：
+                           <input type="text" name="receiver" id="receiver" value="" maxlength="30">
+                            <i class="error-tips"></i>
+                        </li>
+                        <li>消 息 内 容：
+                           <input type="text" name="text" id="text" value="" maxlength="1000">
+                            <i class="error-tips"></i>
+                        </li>
+
+                        <li class="button heibtn">
+							<input type="submit" id="jsEditUserBtn" value="发送">
+						</li>
+
+
+					</ul>
+                    {{ msg}}
+                    {% csrf_token %}
+				</form>
+			</div>
+
+
+
+
+
+		</div>
+
+
+
+
+        <div class="personal_des Releasecont">
+			<div class="head">
+				<h1>接收消息</h1>
+			</div>
+		</div>
+		<div class="personal_des permessage">
+
+			<div class="messagelist">
+
+                {% for message in messages.object_list %}
+
+                    <div class="messages">
+                        <div class="fr">
+                            <div class="top"><span class="fl time">{{ message.add_time }}</span><span class="fr btn foldbtn"></span></div>
+                            <p>
+                                {{ message.message }}
+                            </p>
+                        </div>
+                    </div>
+
+                {% endfor %}
+
+
+
+			</div>
+
+
+			<div class="pageturn pagerright">
+                <ul class="pagelist">
+                    {% if messages.has_previous %}
+                             <li class="long"><a href="?{{ messages.previous_page_number.querystring }}">上一页</a></li>
+                    {% endif %}
+                    {% for page in messages.pages %}
+                            {% if page %}
+                                {% ifequal page messages.number %}
+                                    <li class="active"><a href="?{{ page.querystring }}">{{ page }}</a></li>
+                                {% else %}
+                                    <li><a href="?{{ page.querystring }}" class="page">{{ page }}</a></li>
+                                {% endifequal %}
+                            {% else %}
+                                <li class="none"><a href="">...</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if messages.has_next %}
+                            <li class="long"><a href="?{{ messages.next_page_number.querystring }}">下一页</a></li>
+                        {% endif %}
+
+                </ul>
+            </div>
+
+
+		</div>
+
+
+	</div>
+{% endblock %}

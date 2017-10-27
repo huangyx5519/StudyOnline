@@ -1,0 +1,170 @@
+{% extends 'usercenter-base.html' %}
+
+{% block title %}
+个人信息
+{% endblock %}
+
+{% block custom_bread %}
+    <section>
+        <div class="wp">
+            <ul  class="crumbs">
+                <li><a href="{% url 'index' %}">首页</a>></li>
+                <li><a href="{% url 'users:user_info' %}">个人中心</a>></li>
+                <li>个人信息</li>
+            </ul>
+        </div>
+    </section>
+{% endblock %}
+
+{% block right_content %}
+    <div class="right">
+
+    <div class="listoptions" style="margin-bottom: 70px">
+            <ul>
+                <li>
+                    <h2>已有课程</h2>
+                    <div class="cont">
+                    <a href="?ID=&ls="><span class="{% ifequal '' course_re.id %} active2 {% endifequal %}">新增课程</span></a>
+                    {% for course in courses %}
+                        <a href="?ID={{course.id }}&ls="><span class="{% ifequal course.id course_re.id %} active2 {% endifequal %}">{{ course.name }}</span></a>
+                    {% endfor %}
+                    <a href="?ID={{course_re.id }}&del={{course_re.id }}"><span style="color: #ff1b11;background-color: #ff9900;">删除课程</span></a>
+                    </div>
+
+                </li>
+
+                <li>
+                    <h2>课程章节</h2>
+                    <div class="cont">
+                        <a href="?ID={{course_re.id }}&ls="><span class="{% ifequal course_re.id  ''%} active2 {% endifequal %}">新增章节</span></a>
+                    {% for lesson in lessons %}
+                        <a href="?ID={{course_re.id }}&ls={{ lesson.id }}"><span class="{% ifequal  lesson.id  lesson_re.id  %} active2 {% endifequal %}">{{ lesson.name }}</span></a>
+                    {% endfor %}
+                    </div>
+                </li>
+            </ul>
+    </div>
+
+
+
+      <div class="personal_des ">
+
+         <div class="head" style="border:1px solid #eaeaea;">
+            <h1>{% if course_re.id %} 修改{% else %}新增{% endif %}课程</h1>
+         </div>
+         <div class="inforcon">
+             {% if course_re.id %}
+            <div class="left" style="width:242px;">
+                    <iframe id='frameFile' name='frameFile' style='display: none;'></iframe>
+                    <form class="clearfix" id="jsAvatarForm" enctype="multipart/form-data" autocomplete="off" method="post" action="{% url 'users:course_image_upload' course_re.id %}" target='frameFile'>
+                    <label class="changearea" for="avatarUp">
+                        <span id="avatardiv" class="pic">
+                            <img width="100" height="100" class="js-img-show" id="avatarShow" src="{{ MEDIA_URL }}{{ course_re.image }}"/>
+                        </span>
+                        <span class="fl upload-inp-box" style="margin-left:70px;">
+                            <span class="button btn-green btn-w100" id="jsAvatarBtn">封面图</span>
+                            <input type="file" name="image" id="avatarUp" class="js-img-up"/>
+                        </span>
+                    </label>
+                    {% csrf_token %}
+                </form>
+
+            </div>
+             {% endif %}
+            <form class="perinform" action="{% url "users:user_publish" %}" method="post" id="jsEditUserForm" autocomplete="off">
+
+                    <ul class="right">
+                        <li style="display: none">类型：
+                           <input type="text" name="type" id="type" value="0" maxlength="100" >
+                            <i class="error-tips"></i>
+                        </li>
+                        <li style="display: none">课 程 i d：
+                           <input type="text" name="id" id="form_course_id" value="{{ course_re.id }}" maxlength="100" >
+                            <i class="error-tips"></i>
+                        </li>
+                        <li>课程名称：
+                           <input type="text" name="name" id="name" value="{{ course_re.name }}" maxlength="100">
+                            <i class="error-tips"></i>
+                        </li>
+                        <li>课程分类：
+                            <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="radio" name="tag" value="sf" >算法</label>
+                            <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="radio" name="tag" value="pt" >python语法</label>
+                            <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="radio" name="tag" value="ap" >应用</label>
+                            <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="radio" name="tag" value="zn" >人工智能</label>
+                            <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="radio" name="tag" value="ot" checked="checked">其他</label>
+                        </li>
+                        <li>课程描述：
+                           <input type="text" name="desc" id="desc" value="{{ course_re.desc }}" maxlength="100">
+                            <i class="error-tips"></i>
+                        </li>
+                        <li>课程详情：
+                           <input type="text" name="detail" id="detail" value="{{ course_re.detail }}" maxlength="100">
+                            <i class="error-tips"></i>
+                        </li>
+                        <li>难度：
+                            <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="radio" name="degree" value="cj" >初级</label>
+                            <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="degree" value="zj">中级</label>
+                            <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="degree" value="gj">高级</label>
+{#                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="degree" value="gj" {% if request.user.gender == 'female' %} checked="checked" {% endif %} >高级</label>#}
+                        </li>
+                        <li>学习时长：
+                           <input type="text" name="learn_times" id="learn_times" value="{{ course_re.learn_times }}" maxlength="100">
+                            <i class="error-tips"></i>
+                        </li>
+                        <li class="button heibtn">
+                 <input type="submit" id="jsEditUserBtn" value="保存">
+                {{ msg }}
+                </li>
+               </ul>
+                    {% csrf_token %}
+            </form>
+         </div>
+
+
+
+          <div class="head" style="border:1px solid #eaeaea;">
+            <h1>{% if lesson_re.id %} 修改{% else %}新增{% endif %}章节</h1>
+         </div>
+          <div class="inforcon">
+
+            <form class="perinform" action="{% url "users:user_publish" %}" method="post" id="jsEditUserForm" autocomplete="off">
+
+                    <ul class="right">
+                        <li style="display: none">类型：
+                           <input type="text" name="type" id="type" value="1" maxlength="100" >
+                            <i class="error-tips"></i>
+                        </li>
+                        <li style="display: none">cId：
+                           <input type="text" name="cId" id="type" value="{{ course_re.id}}" maxlength="100" >
+                            <i class="error-tips"></i>
+                        </li>
+                        <li style="display: none">章 节 i d：
+                           <input type="text" name="id" id="form_course_id" value="{{ lesson_re.id }}" maxlength="100" >
+                            <i class="error-tips"></i>
+                        </li>
+                        <li >章 节 名 称：
+                           <input type="text" name="name" id="name" value="{{ lesson_re.name }}" maxlength="100">
+                            <i class="error-tips"></i>
+                        </li>
+
+
+                        <li >章 节 视 频：
+                           <input type="text" name="url" id="name" value="" maxlength="100">
+                            <i class="error-tips"></i>
+                        </li>
+
+                        <li class="button heibtn">
+                 <input type="submit" id="jsEditUserBtn" value="保存">
+                {{ msg }}
+                </li>
+               </ul>
+                    {% csrf_token %}
+            </form>
+         </div>
+      </div>
+   </div>
+
+{% endblock %}
+
+
+

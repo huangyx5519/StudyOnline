@@ -1,0 +1,87 @@
+
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block content %}
+
+    <div class="right" >
+    <div class="personal_des Releasecont">
+        <div class="head">
+            <h1>热门课程</h1>
+        </div>
+    </div>
+    <div class="personal_des permessage">
+        <div class="companycenter">
+            <div class="group_list brief">
+
+                {% for course in courses %}
+
+                    <div class="module1_5 box">
+                         <a href="{% url 'course:course_detail' course.id %}">
+                                <img width="280" height="350" class="scrollLoading" src="{{ MEDIA_URL }}{{ course.image }}"/>
+                            </a>
+                            <div class="des">
+                                <a href="{% url 'course:course_detail' course.id %}">
+                                    <h2>{{ course.name }}</h2>
+                                </a>
+                                <span class="fl">时长：<i class="key">{{ course.learn_times }}</i></span>
+                                <span class="fr">学习人数：{{ course.students }}&nbsp;&nbsp;</span>
+                            </div>
+                            <div class="bottom">
+                                <a href="{% url 'course:course_detail' course.id %}"><span class="fl">{{ course.course_org.name }}</span></a>
+                                <span class="star fr  notlogin
+                                    " data-favid="15">
+                                    {{ course.fav_nums }}
+                                </span>
+                            </div>
+                    </div>
+
+
+
+                {% endfor %}
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="personal_des Releasecont">
+        <div class="head">
+            <h1>热门讲师</h1>
+        </div>
+    </div>
+    <div class="personal_des permessage">
+        <div class="companycenter">
+            <div class="group_list brief">
+
+                {% for teacher in teachers %}
+
+                    <div class="module1_5 box">
+                         <a href="{% url 'org:org_teacher' teacher.id %}">
+                                <img width="280" height="350" class="scrollLoading" src="{{ MEDIA_URL }}{{ teacher.image }}"/>
+                            </a>
+                            <div class="des">
+                                <a href="{% url 'org:org_teacher' teacher.id %}">
+                                    <h2>{{ teacher.name }}</h2>
+                                </a>
+                                <span class="fl">教学特点：<i class="key">{{ teacher.points }}</i></span>
+                                <span class="fr">就职公司：{{ teacher.work_company }}&nbsp;&nbsp;</span>
+                            </div>
+                            <div class="bottom">
+                                <span class="star fr  notlogin
+                                    " data-favid="15">
+                                    {{ teacher.fav_nums }}
+                                </span>
+                            </div>
+                    </div>
+
+                {% endfor %}
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

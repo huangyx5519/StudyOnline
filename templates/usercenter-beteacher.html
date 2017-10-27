@@ -1,0 +1,39 @@
+{% extends 'usercenter-base.html' %}
+{% block right_content %}
+    <div class="right">
+    <div class="right">
+		<div class="personal_des ">
+			<div class="head" style="border:1px solid #eaeaea;">
+				<h1>教师信息</h1>
+			</div>
+			<div class="inforcon">
+				<form class="perinform" action="{% url "users:be_teacher" %}" method="post" id="jsEditUserForm" autocomplete="off">
+					<ul class="right" style="margin-left: -500px">
+                        <li>工 作 年 限：
+                           <input type="text" name="work_years" id="work_years" value="" maxlength="100">
+                            <i class="error-tips"></i>
+                        </li>
+                        <li>就 职 公 司：
+                           <input type="text" name="work_company" id="work_company" value="" maxlength="100">
+                            <i class="error-tips"></i>
+                        </li>
+                        <li>公 司 职 位：
+                           <input type="text" name="work_position" id="work_position" value="" maxlength="100">
+                            <i class="error-tips"></i>
+                        </li>
+                        <li>教 学 特 点：
+                           <input type="text" name="points" id="points" value="" maxlength="100">
+                            <i class="error-tips"></i>
+                        </li>
+                        <li class="button heibtn">
+							<input type="submit" id="jsEditUserBtn" value="保存">
+						</li>
+
+
+					</ul>
+                    {% csrf_token %}
+				</form>
+			</div>
+		</div>
+	</div>
+{% endblock %}
